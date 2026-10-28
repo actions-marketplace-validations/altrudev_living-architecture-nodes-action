@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "product": "living-architecture-nodes-action",
+  "repository": "altrudev/living-architecture-nodes-action",
+  "repository_visibility_required": "public",
+  "marketplace_type": "github-action",
+  "marketplace_name": "Living Architecture Nodes Check",
+  "marketplace_listing_url": "https://github.com/marketplace/actions/living-architecture-nodes-check",
+  "marketplace_categories": [
+    "code-quality",
+    "utilities"
+  ],
+  "pricing": "free",
+  "paid_entitlements_enabled": false,
+  "live_release": {
+    "version": "0.1.3",
+    "tag": "v0.1.3",
+    "commit": "d1a4dbdefa0ce0b177e8f0835219a8625ec2db1b",
+    "marketplace_verified": true
+  },
+  "candidate_release": null,
+  "compatibility_aliases": {
+    "v0.1": "d1a4dbdefa0ce0b177e8f0835219a8625ec2db1b",
+    "v0": "d1a4dbdefa0ce0b177e8f0835219a8625ec2db1b",
+    "verified": true,
+    "movement_allowed": false,
+    "movement_rule": "Advance only after a replacement immutable release is published and independently verified live in GitHub Marketplace."
+  },
+  "promotion_evidence": {
+    "marketplace_latest_verified": true,
+    "alias_v0_1_clone_verified": true,
+    "alias_v0_clone_verified": true,
+    "tests_per_alias": 12,
+    "npm_audit_vulnerabilities": 0
+  },
+  "runtime_security": {
+    "npm_runtime_dependencies": 0,
+    "runtime_network_access": false,
+    "telemetry": false,
+    "source_contents_read_by_scanner": false,
+    "shell_invocation": false,
+    "local_git_subprocess": true,
+    "private_vulnerability_reporting": true
+  },
+  "client_data": {
+    "diagnostic_schema": "explicit-allowlist",
+    "absolute_workspace_paths_exported": false,
+    "full_repository_inventory_exported": false,
+    "source_contents_exported": false,
+    "repository_identity_metadata_exported": false,
+    "secret_metadata_redaction": true,
+    "markdown_path_escaping": true,
+    "atomic_diagnostic_replacement": true,
+    "posix_private_file_mode": "0600",
+    "posix_new_directory_mode": "0700"
+  },
+  "licensing": {
+    "model": "source-available-proprietary",
+    "eula_required": true,
+    "eula_file": "EULA.md",
+    "eula_version": "1.0",
+    "license_file": "LICENSE",
+    "trademark_file": "TRADEMARK.md",
+    "third_party_notices_file": "THIRD_PARTY_NOTICES.md",
+    "contribution_terms_file": "CONTRIBUTING.md",
+    "customer_content_ownership_retained": true,
+    "official_action_use_free": true,
+    "modified_competing_redistribution_allowed": false,
+    "hosted_competing_service_allowed": false
+  },
+  "privacy_source": "PRIVACY.md",
+  "security_source": "SECURITY.md",
+  "support_source": "SUPPORT.md",
+  "release_notes_source": "CHANGELOG.md"
+}

@@ -1,117 +1,119 @@
 # ARCH.md — Living Architecture Nodes Action
 
-## Intent layer
+## Product intent
 
-This repository is the official GitHub Action wrapper for Living Architecture Nodes checks and diagnostic exports. It is designed to run inside GitHub Actions without external dependencies, scan a repository workspace, detect missing architecture-memory artifacts, detect missing `.node.md` companion files, detect dirty-node risk from changed files, and export JSON/Markdown diagnostic bundles.
+This repository is the official **Free GitHub Action** for Living Architecture Nodes repository checks and client-safe local diagnostic exports.
 
-The action must preserve the commercial boundary: it may expose a free/basic checker, but must not include private commercial core engine logic or paid desktop/VS Code implementation internals.
+It is the CI/adoption surface for LAN. It must remain distinct from:
 
-## Reality layer
+- the private commercial LAN engine;
+- the VS Code extension;
+- a GitHub App or hosted service;
+- payment processing or license issuance;
+- a general AI-agent runtime.
 
-v0.1.0 is a standalone Node 20 JavaScript action using only built-in Node modules. It implements:
+The Action is free to use under its EULA, but the implementation is **source-available proprietary software**.
 
-- required artifact checks for `ARCH.md`, `NERVE.md`, and `CHANGELOG.node.md`
-- source-file scanning by extension
-- `.node.md` matching
-- orphan node detection
-- best-effort changed-file detection through local git diff
-- dirty-node detection for changed source files where matching node files were not changed
-- JSON and Markdown diagnostic export
-- GitHub Actions outputs and step summary
+## Runtime architecture
 
-Pro license validation is not active in v0.1.0. The `pro_license_key` input is reserved for a future commercial release.
+```text
+action.yml
+   ↓
+src/index.js
+   ↓
+src/config.js ──→ src/workspace-authority.js
+   ↓
+src/scanner.js
+   ↓
+src/checker.js ←── src/git.js
+   ↓
+src/client-data.js ──→ src/redactor.js
+   ├──→ src/summary.js → GitHub step summary
+   └──→ src/exporter.js → private local JSON/Markdown diagnostics
+```
 
-## Gap log
+## Free verification contract
 
-| Date | Gap | Status |
-|---|---|---|
-| 2026-06-02 | Pro license validation input exists but no remote/cryptographic license validation is implemented. | Intentional placeholder; do not market as active paid gating. |
-| 2026-06-02 | Dirty detection depends on checkout history and available git refs. | Documented via `fetch-depth: 0` recommendation. |
-| 2026-06-02 | Source extension mapping is generic and may need language/framework-specific node mapping later. | Accepted for v0.1.0. |
+The Action performs basic local CI checks:
 
-## Module index
+- required `ARCH.md`, `NERVE.md`, and `CHANGELOG.node.md`;
+- source-to-node coverage;
+- orphan-node detection;
+- changed-file/node drift when local git history is available;
+- configurable failure thresholds;
+- client-safe local JSON/Markdown reports.
 
-| Module | Node file | Health | Notes |
-|---|---|---:|---|
-| `action.yml` | `action.node.md` | 95 | Public GitHub Action metadata and input/output contract. |
-| `src/index.js` | `src/index.node.md` | 95 | Main orchestration entrypoint. |
-| `src/config.js` | `src/config.node.md` | 95 | Reads GitHub Action inputs and normalizes config. |
-| `src/fs-utils.js` | `src/fs-utils.node.md` | 95 | Filesystem helpers and path normalization. |
-| `src/scanner.js` | `src/scanner.node.md` | 95 | Repository scanning and source-to-node mapping. |
-| `src/git.js` | `src/git.node.md` | 90 | Best-effort changed-file detection; sensitive to checkout depth. |
-| `src/checker.js` | `src/checker.node.md` | 95 | Policy checks and health scoring. |
-| `src/redactor.js` | `src/redactor.node.md` | 90 | Secret redaction helper; should stay conservative. |
-| `src/exporter.js` | `src/exporter.node.md` | 95 | Writes JSON and Markdown diagnostic exports. |
-| `src/summary.js` | `src/summary.node.md` | 95 | Human-readable report rendering. |
-| `src/github-io.js` | `src/github-io.node.md` | 95 | GitHub Actions outputs, summaries, and annotations. |
+The maintenance score is heuristic. It is not semantic architecture proof.
 
-## Static layer
+```text
+verification_scope = basic-local-ci
+semantic_architecture_status = NOT_VERIFIED
+```
 
-### Purpose and responsibility boundary
+## Client-data architecture
 
-This repository provides the GitHub Action wrapper only. It must not become the full private commercial engine, VS Code extension, desktop app, or license server.
+The normal scanner enumerates paths and metadata. It does not read source-file contents.
 
-### Dependencies
+Client-visible JSON and Markdown are produced from `src/client-data.js`, an explicit allowlist. That boundary excludes:
 
-Calls:
+- absolute runner/workspace paths;
+- full source/node inventories;
+- source contents;
+- GitHub repository/ref/SHA/event identity metadata;
+- arbitrary future checker/scanner fields.
 
-- local filesystem
-- local git CLI
-- GitHub Actions environment variables and output files
+Relative paths associated with findings are retained because they are necessary to make the diagnostic actionable. Secret-shaped path values are redacted and Markdown path values are escaped.
 
-Called by:
+## Filesystem authority
 
-- GitHub Actions workflow runner
-- local `node src/index.js` self-checks
+`GITHUB_WORKSPACE` is the authority root.
 
-### Contracts
+Optional `workspace` and `export_path` values cannot escape that root. Parent traversal, absolute external targets, and symbolic-link components are rejected.
 
-Inputs are declared in `action.yml`. Outputs are declared in `action.yml`. Diagnostic exports are written to `export_path`.
+Diagnostic files are written through private same-directory temporary files followed by atomic rename. This avoids truncating a pre-existing destination inode and prevents a hard link to the old inode from being modified by replacement.
 
-## Dynamic layer
+On POSIX systems, diagnostic files use `0600` and newly created export directories use `0700`.
 
-### Current stability state
+## Runtime authority
 
-Stable for v0.1.0 MVP/basic checks.
+The Action has zero npm runtime dependencies.
 
-### Recent mutations
+It has no runtime HTTP client, GitHub API call, telemetry, `eval`, or dynamic code execution.
 
-Initial action implementation created fresh as standalone wrapper.
+Changed-file analysis invokes the local `git` executable using `execFileSync` with bounded `diff` and `status` commands. No shell is invoked and no network git command is used.
 
-### Known fragile points
+## Licensing/IP architecture
 
-- dirty-node detection requires useful git history in the checked-out repository
-- `HEAD~1` fallback can fail on shallow clones or first commits
-- language-specific source-to-node mapping is intentionally simple
+End-user use is governed by `EULA.md`.
 
-### Interaction warnings
+The license model is source-available proprietary:
 
-Changing scan extensions or exclude directories affects missing-node counts and workflow failures.
+- official Free Action use is granted;
+- Customer Content remains the user's property;
+- competing modified redistribution and hosted competing service use are not granted;
+- trademark rights are separate;
+- contribution rights are defined in `CONTRIBUTING.md`;
+- third-party obligations are tracked in `THIRD_PARTY_NOTICES.md`;
+- GitHub platform/Marketplace rights granted separately to GitHub are preserved.
 
-### Performance observations
+## Release architecture
 
-Recursive scan is acceptable for small/medium repositories. Very large monorepos may need path filters later.
+Exact tags are immutable.
 
-### Security notes
+Current live release:
 
-Diagnostic export includes file paths but no source contents. Redactor is present for future expansions and defensive output cleanup.
+```text
+v0.1.2 → c7d44c31bb7631d8aec357b94803d89246555e7e
+v0.1   → same verified commit
+v0     → same verified commit
+```
 
-## Diagnostic layer
+v0.1.3 is a candidate until the merged commit passes Frequency, the immutable release is published through GitHub Marketplace, the public listing is verified, and only then are moving aliases advanced.
 
-### Past bug patterns
+## Known limits
 
-- None yet.
-
-### Near misses
-
-- Pro license input could be misunderstood as active validation. README and reports explicitly state it is reserved for future release.
-
-### Regression triggers
-
-- Changing `action.yml` inputs without updating `src/config.js`.
-- Changing output names without updating `src/index.js`.
-- Changing report structure without updating `src/exporter.js` and `src/summary.js`.
-
-### Suspected hidden coupling
-
-- Git diff behavior is coupled to `actions/checkout` fetch depth.
+- changed-file detection depends on available git history;
+- shallow clones can reduce drift coverage;
+- source-extension mapping is generic;
+- filesystem race resistance is bounded by Node.js/platform filesystem primitives;
+- this Action does not claim semantic architecture verification.

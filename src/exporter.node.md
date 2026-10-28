@@ -1,67 +1,23 @@
 # src/exporter.js — Living Architecture Node
 
-## Static layer
+## Purpose
 
-### Purpose and responsibility boundary
+Writes client-safe local JSON and Markdown diagnostic reports.
 
-Diagnostic JSON and Markdown export writer.
+## Contracts
 
-This node must remain focused on its stated responsibility and should not absorb unrelated product, licensing, or UI concerns.
+- output stays inside the authorized workspace;
+- schema is living-architecture-nodes-action-diagnostic@0.1.3;
+- exporter uses the explicit client-data allowlist;
+- JSON and Markdown use the same sanitized check model;
+- absolute workspace paths, repository identity metadata, full inventories, arbitrary future fields, and source contents are not exported;
+- diagnostic files use private atomic replacement where supported;
+- no remote service is called.
 
-### Dependencies
+## Current state
 
-Calls: src/redactor.js, src/summary.js, src/fs-utils.js.
+v0.1.3 client-data hardening candidate.
 
-Called by: src/index.js.
+## Regression triggers
 
-### Contracts
-
-- Accepts only normalized inputs from its direct caller unless otherwise stated.
-- Returns deterministic data structures or performs one bounded side effect.
-- Must not call remote services or collect telemetry.
-
-## Dynamic layer
-
-### Current stability state
-
-Stable for v0.1.0.
-
-### Recent mutations
-
-Initial implementation created for the GitHub Action wrapper.
-
-### Known fragile points
-
-- Changes to file paths, action input names, or report shapes can cascade into dependent modules.
-- Keep behavior local-first and CI-safe.
-
-### Interaction warnings
-
-Review `ARCH.md` and `NERVE.md` before changing this module because the action relies on tight alignment between metadata, scanner output, checker output, and reports.
-
-### Performance observations
-
-Acceptable for small and medium repositories. Large repositories may require path filtering in later versions.
-
-### Security notes
-
-No telemetry. No remote calls. Avoid exporting source contents or secrets.
-
-## Diagnostic layer
-
-### Past bug patterns
-
-None yet.
-
-### Near misses
-
-None yet.
-
-### Regression triggers
-
-- Changing public output shape without updating README and `action.yml`.
-- Changing source matching behavior without updating check/report expectations.
-
-### Suspected hidden coupling
-
-Potential coupling to GitHub Actions checkout behavior and git history depth.
+Arbitrary scanner/checker serialization, unsafe direct overwrite, full inventory/path identity leakage, schema drift, or remote transmission.

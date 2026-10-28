@@ -1,41 +1,40 @@
 # Product Roadmap — Living Architecture Nodes Action
 
-## v0.1.x — Public basic action
+## v0.1.3 — live licensing, privacy, and security baseline
 
-- Required artifact detection
-- Missing node detection
-- Dirty-node risk detection
-- Diagnostic JSON/Markdown export
-- GitHub step summary
-- Artifact upload support through workflow example
+Candidate work completed in this line:
 
-## v0.2.x — Better CI intelligence
+- separate EULA for GitHub Marketplace end users;
+- proprietary source-available license boundary;
+- explicit Customer Content ownership protection;
+- trademark and inbound-contribution terms;
+- third-party notice discipline;
+- client-data allowlist shared by JSON and GitHub/Markdown summaries;
+- removal of absolute paths, full inventories, source contents, and repository identity metadata from exports;
+- atomic private diagnostic writes;
+- hard-link/symlink/traversal regression coverage;
+- private vulnerability reporting;
+- zero npm runtime dependencies.
 
-- Config file support: `living-architecture-nodes.config.json`
-- Path filters for monorepos
-- Language-specific mapping presets
-- PR comment summary
-- SARIF export option
-- Better first-commit and shallow-clone handling
+v0.1.3 is now verified live in GitHub Marketplace. v0.1 and v0 point to the same immutable verified release commit.
 
-## v0.3.x — Pro-ready reports
+## v0.2.x — better Free CI intelligence
 
-- Architecture drift report
-- Cascade map export
-- Health score history
-- AI handoff bundle zip
-- Client-ready Markdown report
-- Redaction policy configuration
+Candidate work:
 
-## v1.0 — Commercial wrapper
+- configuration file support;
+- monorepo path filters;
+- language/framework mapping presets;
+- better first-commit and shallow-history behavior;
+- optional SARIF export after a separate privacy/schema review;
+- richer PR-friendly summaries without repository write permission.
 
-- License validation
-- Team policy gates
-- Private repo support workflow
-- Enterprise configuration profile
-- Signed release package
-- Official compatibility badge rules
+## Separate commercial direction
 
-## Boundaries
+Paid LAN capabilities must not be implemented as a raw secret/license key in this Action.
 
-This action should remain a CI wrapper. It should not absorb the private core engine, desktop app, VS Code extension, or license service implementation.
+Commercial value belongs in separately licensed LAN products and/or a GitHub App/service for organization policy, cross-repository architecture, dashboards, verified history, advanced semantic analysis, and managed capabilities.
+
+## Boundary
+
+This repository remains the Free CI Action. It must not absorb the private LAN engine, VS Code commercial product, payment service, or general agent runtime.
